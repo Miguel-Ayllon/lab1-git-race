@@ -41,12 +41,25 @@ class HelloControllerMVCTests {
     
     @Test
     fun `should return API response as JSON`() {
+        val expectedMorning = "Good morning, Test!"
+        val expectedAfternoon = "Good afternoon, Test!"
+        val expectedEvening = "Good evening, Test!"
+
         mockMvc.perform(get("/api/hello").param("name", "Test"))
             .andDo(print())
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.message", equalTo("Hello, Test!")))
-            .andExpect(jsonPath("$.timestamp").exists())
+            .andExpect(
+                jsonPath(
+                    "\$.message",
+                    anyOf(
+                        equalTo(expectedMorning),
+                        equalTo(expectedAfternoon),
+                        equalTo(expectedEvening)
+                    )
+                )
+            )
+            .andExpect(jsonPath("\$.timestamp").exists())
     }
 }
 

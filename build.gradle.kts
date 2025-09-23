@@ -27,6 +27,8 @@ dependencies {
     implementation(libs.bootstrap)
     implementation(libs.jackson.module.kotlin)
     testImplementation(libs.spring.boot.starter.test)
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 tasks.withType<Test> {
