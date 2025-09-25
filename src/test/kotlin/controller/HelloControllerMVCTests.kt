@@ -22,6 +22,7 @@ class HelloControllerMVCTests {
     @Test
     fun `should return home page with default message`() {
         mockMvc.perform(get("/"))
+
             .andDo(print())
             .andExpect(status().isOk)
             .andExpect(view().name("welcome"))
@@ -32,6 +33,7 @@ class HelloControllerMVCTests {
     @Test
     fun `should return home page with personalized message`() {
         mockMvc.perform(get("/").param("name", "Developer"))
+
             .andDo(print())
             .andExpect(status().isOk)
             .andExpect(view().name("welcome"))
@@ -41,25 +43,28 @@ class HelloControllerMVCTests {
     
     @Test
     fun `should return API response as JSON`() {
-        val expectedMorning = "Good morning, Test!"
-        val expectedAfternoon = "Good afternoon, Test!"
-        val expectedEvening = "Good evening, Test!"
 
         mockMvc.perform(get("/api/hello").param("name", "Test"))
+
             .andDo(print())
             .andExpect(status().isOk)
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.message").value(containsString("Test!")))
+            .andExpect(jsonPath("$.message").value(containsString("Today is")))
             .andExpect(
+
                 jsonPath(
-                    "\$.message",
+                    "$.message",
                     anyOf(
-                        equalTo(expectedMorning),
-                        equalTo(expectedAfternoon),
-                        equalTo(expectedEvening)
+                        containsString("Good morning"),
+                        containsString("Good afternoon"),
+                        containsString("Good evening")
                     )
                 )
             )
-            .andExpect(jsonPath("\$.timestamp").exists())
+
+            .andExpect(jsonPath("$.dayOfWeek").exists())
+            .andExpect(jsonPath("$.timestamp").exists())
     }
 }
 
